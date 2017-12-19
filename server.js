@@ -84,20 +84,67 @@ Pukron.create({
     author: 'Gky',
     detail: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tincidunt volutpat eleifend. Suspendisse massa risus, lobortis sed condimentum ac, tempor vitae mauris. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. '
 })
-
-// query param : set
-
-app.get('/', function (req, res) {
+//----------------------//
+// Index Route ---------//
+//----------------------//
+// query param : all, set
+app.get('/pukron', function (req, res) {
     const limitFactor = req.query.all ? req.query.set : 1
     const skipFactor = req.query.all ? 0 : 1
     Pukron.find({}).sort({_id: -1}).limit(9 * limitFactor).skip((req.query.set - 1) * 9 * skipFactor).exec(function (err, pukron) {
+        if (err) {
+            throw err
+        }
         if (pukron.length === 0) {
-          res.status(404).send('Not found')
+          res.status(404).send('Not Found')
         } else {
           res.json(pukron)
         }
     })
 })
+
+//-----------------------//
+// Create Route ---------//
+//-----------------------//
+app.post('/pukron', function (req, res) {
+    const newPukron = {
+        photoURL: req.body.photoURL,
+        title: req.body.title,
+        author: req.body.author,
+        detail: req.body.detail
+    }
+    Pukron.create(newPukron, function (err, pukron) {
+        if (err) {
+            throw err
+        }
+        res.json(pukron)
+    })
+})
+
+//-----------------------//
+// Show Route -----------//
+//-----------------------//
+app.get('/pukron/:id', function (req, res) {
+    Pukron.findById(req.params.id, function (err, pukron) {
+        if (err) {
+            console.log(err)
+        }
+        if (pukron.length === 0) {
+            res.status(404).send('Not Found')
+        } else {
+            res.json(pukron)
+        }
+    })
+})
+
+//-----------------------//
+// Update Route ---------//
+//-----------------------//
+app.put('/:id')
+//-----------------------//
+// Destroy Route --------//
+//-----------------------//
+app.delete('/:id')
 
 app.post('/signup', function (req, res) {
     User.findOne({email: req.body.email}, function (err, user) {
