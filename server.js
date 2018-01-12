@@ -111,7 +111,8 @@ app.post('/pukron', function (req, res) {
         photoURL: req.body.photoURL,
         title: req.body.title,
         author: req.body.author,
-        detail: req.body.detail
+        detail: req.body.detail,
+        detailHTML: req.body.detailHTML
     }
     Pukron.create(newPukron, function (err, pukron) {
         if (err) {

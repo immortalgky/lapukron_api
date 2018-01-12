@@ -5,6 +5,7 @@ const pukronSchema = new mongoose.Schema({
     author: String,
     photoURL: String,
     detail: String,
+    detailHTML: String,
     createAt: {
         type: Date,
         default: Date.now()
